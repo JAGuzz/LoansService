@@ -8,5 +8,5 @@ import com.jaguzz.loans.entity.Loans;
 
 public interface LoansRepository extends JpaRepository<Loans, Long> {
 
-    Optional<Loans> finByMobileNumber(String mobileNumber);
+    Optional<Loans> findByMobileNumber(String mobileNumber);
 }
