@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.jaguzz.loans.dto.LoansDto;
 import com.jaguzz.loans.entity.Loans;
 import com.jaguzz.loans.exception.LoanAlreadyExistException;
+import com.jaguzz.loans.exception.ResourceNotFoundException;
 import com.jaguzz.loans.mapper.LoansMapper;
 import com.jaguzz.loans.repository.LoansRepository;
 import com.jaguzz.loans.service.ILoansService;
@@ -35,8 +36,13 @@ public class LoanServiceImpl implements ILoansService {
 
     @Override
     public LoansDto fetchLoan(String mobileNumber) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fetchLoan'");
+
+        Loans loan = loansRepository.finByMobileNumber(mobileNumber).orElseThrow(
+            () -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber)
+        );
+
+        LoansDto loanDto = LoansMapper.mapToLoanDto(loan, new LoansDto());
+        return loanDto;
     }
 
 }
