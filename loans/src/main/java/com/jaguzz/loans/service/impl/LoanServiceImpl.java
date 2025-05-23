@@ -2,6 +2,7 @@ package com.jaguzz.loans.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,8 @@ public class LoanServiceImpl implements ILoansService {
             throw new LoanAlreadyExistException("Loan already registered with the given mobile number.");
         }
         
+        long randomLoanNumber = 100000000000L + new Random().nextInt(900000000);
+        loan.setLoanNumber(Long.toString(randomLoanNumber));
         loan.setCreatedAt(LocalDateTime.now());
         loan.setCreatedBy("Loans_MS");
         loansRepository.save(loan);
