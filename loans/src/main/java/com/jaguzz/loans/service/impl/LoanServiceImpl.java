@@ -24,11 +24,11 @@ public class LoanServiceImpl implements ILoansService {
     @Override
     public void createLoan(LoansDto loansDto) {
         Loans loan = LoansMapper.mapToLoans(loansDto, new Loans());
-        Optional<Loans> optionalLoan = loansRepository.findByMobileNumber(loansDto.getMobileNumber());
-        if(optionalLoan.isPresent()){
+        
+        if(validateLoan(loansDto)){
             throw new LoanAlreadyExistException("Loan already registered with the given mobile number.");
         }
-
+        
         loan.setCreatedAt(LocalDateTime.now());
         loan.setCreatedBy("Loans_MS");
         loansRepository.save(loan);
@@ -36,13 +36,45 @@ public class LoanServiceImpl implements ILoansService {
 
     @Override
     public LoansDto fetchLoan(String mobileNumber) {
-
-        Loans loan = loansRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber)
-        );
-
-        LoansDto loanDto = LoansMapper.mapToLoanDto(loan, new LoansDto());
+        LoansDto loanDto = findLoanByMobileNumber(mobileNumber);
         return loanDto;
     }
 
+    @Override
+    public LoansDto updateLoan(LoansDto loansDto) {
+        
+        if(!validateLoan(loansDto)){
+            throw new ResourceNotFoundException("Loan", "mobileNumber", loansDto.getMobileNumber());
+        }
+
+        Loans loan = LoansMapper.mapToLoans(loansDto, new Loans());
+        loan.setUpdatedBy("Loans_MS");
+        loan.setUpdatedAt(LocalDateTime.now());
+        loansRepository.save(loan);
+
+        return loansDto;
+    }
+    
+
+    @Override
+    public boolean deleteLoan(String mobileNumber) {
+        LoansDto loansDto = findLoanByMobileNumber(mobileNumber);
+        Loans loan = LoansMapper.mapToLoans(loansDto, new Loans());
+        loansRepository.delete(loan);
+        return !validateLoan(loansDto);
+    }
+    
+    
+        public boolean validateLoan(LoansDto loansDto){
+            Optional<Loans> optionalLoan = loansRepository.findByMobileNumber(loansDto.getMobileNumber());
+            return optionalLoan.isPresent();
+        }
+
+        public LoansDto findLoanByMobileNumber(String mobileNumber){
+            Loans loan = loansRepository.findByMobileNumber(mobileNumber).orElseThrow(
+            () -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber)
+            );
+            return LoansMapper.mapToLoanDto(loan, new LoansDto());
+        }
+    
 }

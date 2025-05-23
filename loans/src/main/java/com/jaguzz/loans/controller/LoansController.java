@@ -13,7 +13,9 @@ import com.jaguzz.loans.service.ILoansService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -39,6 +41,19 @@ public class LoansController {
         return ResponseEntity.status(HttpStatus.OK).body(loansDto);
     }
     
-    
+    @PutMapping("/update")
+    public ResponseEntity<LoansDto> updateLoan(@RequestBody LoansDto loansDto){
+        LoansDto response = loansService.updateLoan(loansDto);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(response); 
+    }
+
+    // delete?mobileNumber=XXXXX
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDto> deleteLoan(@RequestParam String mobileNumber){
+        loansService.deleteLoan(mobileNumber);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_DELETE));
+    }
 
 }
