@@ -57,10 +57,8 @@ public class LoanServiceImpl implements ILoansService {
         Loans loans = loansRepository.findByLoanNumber(loansDto.getLoanNumber()).orElseThrow(
                 () -> new ResourceNotFoundException("Loan", "LoanNumber", loansDto.getLoanNumber()));
 
-        Loans loan = LoansMapper.mapToLoans(loansDto, new Loans());
-        loan.setUpdatedBy("Loans_MS");
-        loan.setUpdatedAt(LocalDateTime.now());
-        loansRepository.save(loan);
+        LoansMapper.mapToLoans(loansDto, loans);
+        loansRepository.save(loans);
 
         return true;
     }
