@@ -116,10 +116,17 @@ public class LoansController {
         }
     )
     @PutMapping("/update")
-    public ResponseEntity<LoansDto> updateLoan(@Valid @RequestBody LoansDto loansDto){
-        LoansDto response = loansService.updateLoan(loansDto);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(response); 
+     public ResponseEntity<ResponseDto> updateLoanDetails(@Valid @RequestBody LoansDto loansDto) {
+        boolean isUpdated = loansService.updateLoan(loansDto);
+        if(isUpdated) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDto(LoansConstants.STATUS_200, LoansConstants.MESSAGE_200));
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_UPDATE));
+        }
     }
 
 

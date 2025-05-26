@@ -8,7 +8,7 @@ public interface ILoansService {
 
     LoansDto fetchLoan(String mobileNumber);
 
-    LoansDto updateLoan(LoansDto loansDto);
+    boolean updateLoan(LoansDto loansDto);
 
     boolean deleteLoan(String mobileNumber);
 
