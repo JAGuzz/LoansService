@@ -61,8 +61,8 @@ public class LoansController {
     }
     )
     @PostMapping("/create")
-    public ResponseEntity<ResponseDto> createLoan(@Valid @RequestBody LoansDto loansDto) {
-        loansService.createLoan(loansDto);
+    public ResponseEntity<ResponseDto> createLoan(@Valid @RequestParam String mobileNumber) {
+        loansService.createLoan(mobileNumber);
         return ResponseEntity.status(HttpStatus.CREATED)
         .body(new ResponseDto(LoansConstants.STATUS_201, LoansConstants.MESSAGE_201));
     }

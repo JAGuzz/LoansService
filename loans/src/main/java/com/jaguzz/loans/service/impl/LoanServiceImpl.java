@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
+import com.jaguzz.loans.constants.LoansConstants;
 import com.jaguzz.loans.dto.LoansDto;
 import com.jaguzz.loans.entity.Loans;
 import com.jaguzz.loans.exception.LoanAlreadyExistException;
@@ -23,18 +24,25 @@ public class LoanServiceImpl implements ILoansService {
     private LoansRepository loansRepository;
 
     @Override
-    public void createLoan(LoansDto loansDto) {
-        Loans loan = LoansMapper.mapToLoans(loansDto, new Loans());
+    public void createLoan(String mobileNumber) {
         
-        if(validateLoan(loansDto)){
+        if(validateLoan(mobileNumber)){
             throw new LoanAlreadyExistException("Loan already registered with the given mobile number.");
         }
         
+        loansRepository.save(createNewLoan(mobileNumber));
+    }
+
+     private Loans createNewLoan(String mobileNumber) {
+        Loans newLoan = new Loans();
         long randomLoanNumber = 100000000000L + new Random().nextInt(900000000);
-        loan.setLoanNumber(Long.toString(randomLoanNumber));
-        loan.setCreatedAt(LocalDateTime.now());
-        loan.setCreatedBy("Loans_MS");
-        loansRepository.save(loan);
+        newLoan.setLoanNumber(Long.toString(randomLoanNumber));
+        newLoan.setMobileNumber(mobileNumber);
+        newLoan.setLoanType(LoansConstants.HOME_LOAN);
+        newLoan.setTotalLoan(LoansConstants.NEW_LOAN_LIMIT);
+        newLoan.setAmountPaid(0);
+        newLoan.setOutstandingAmount(LoansConstants.NEW_LOAN_LIMIT);
+        return newLoan;
     }
 
     @Override
@@ -46,7 +54,7 @@ public class LoanServiceImpl implements ILoansService {
     @Override
     public LoansDto updateLoan(LoansDto loansDto) {
         
-        if(!validateLoan(loansDto)){
+        if(!validateLoan(loansDto.getMobileNumber())){
             throw new ResourceNotFoundException("Loan", "mobileNumber", loansDto.getMobileNumber());
         }
 
@@ -64,12 +72,12 @@ public class LoanServiceImpl implements ILoansService {
         LoansDto loansDto = findLoanByMobileNumber(mobileNumber);
         Loans loan = LoansMapper.mapToLoans(loansDto, new Loans());
         loansRepository.delete(loan);
-        return !validateLoan(loansDto);
+        return !validateLoan(loansDto.getMobileNumber());
     }
     
     
-        public boolean validateLoan(LoansDto loansDto){
-            Optional<Loans> optionalLoan = loansRepository.findByMobileNumber(loansDto.getMobileNumber());
+        public boolean validateLoan(String mobileNumber){
+            Optional<Loans> optionalLoan = loansRepository.findByMobileNumber(mobileNumber);
             return optionalLoan.isPresent();
         }
 

@@ -4,7 +4,7 @@ import com.jaguzz.loans.dto.LoansDto;
 
 public interface ILoansService {
 
-    void createLoan(LoansDto loansDto);
+    void createLoan(String mobileNumber);
 
     LoansDto fetchLoan(String mobileNumber);
 
