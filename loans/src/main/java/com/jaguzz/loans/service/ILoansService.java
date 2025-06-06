@@ -4,12 +4,12 @@ import com.jaguzz.loans.dto.LoansDto;
 
 public interface ILoansService {
 
-    void createLoan(LoansDto loansDto);
+    void createLoan(String mobileNumber);
 
     LoansDto fetchLoan(String mobileNumber);
 
-    // boolean updateLoan(LoanDto loansDto);
+    boolean updateLoan(LoansDto loansDto);
 
-    // boolean deleteLoan(LoanDto loansDto);
+    boolean deleteLoan(String mobileNumber);
 
 }
