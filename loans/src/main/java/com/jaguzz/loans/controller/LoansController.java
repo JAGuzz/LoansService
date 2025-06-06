@@ -1,5 +1,6 @@
 package com.jaguzz.loans.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jaguzz.loans.constants.LoansConstants;
+import com.jaguzz.loans.dto.LoansContactInfoDto;
 import com.jaguzz.loans.dto.LoansDto;
 import com.jaguzz.loans.dto.ResponseDto;
 import com.jaguzz.loans.service.ILoansService;
@@ -26,6 +28,9 @@ public class LoansController {
 
     private ILoansService loansService;
 
+    @Autowired
+    private LoansContactInfoDto loansContactInfoDto;
+
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createLoan(@RequestBody LoansDto loansDto) {
         loansService.createLoan(loansDto);
@@ -39,6 +44,11 @@ public class LoansController {
         return ResponseEntity.status(HttpStatus.OK).body(loansDto);
     }
     
-    
+    @GetMapping("/contact-info")
+    public ResponseEntity<LoansContactInfoDto> getContactInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(loansContactInfoDto);
+    }
 
 }
