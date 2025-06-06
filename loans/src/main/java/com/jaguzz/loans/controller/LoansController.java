@@ -165,6 +165,8 @@ public class LoansController {
         return ResponseEntity.status(HttpStatus.OK)
         .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_DELETE));
     }
+    
+    
     @GetMapping("/contact-info")
     public ResponseEntity<LoansContactInfoDto> getContactInfo() {
         return ResponseEntity
