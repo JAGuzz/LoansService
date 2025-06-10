@@ -121,7 +121,7 @@
 				<version>3.4.5</version>
 				<configuration>
 					<image>
-						<name>jaguzz98/${project.artifactId}:V1.01</name>
+						<name>jaguzz98/${project.artifactId}:s6</name>
 					</image>
 					<excludes>
 						<exclude>
