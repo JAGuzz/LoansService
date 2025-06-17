@@ -120,15 +120,9 @@
 				<artifactId>jib-maven-plugin</artifactId>
 				<version>3.4.5</version>
 				<configuration>
-					<image>
-						<name>jaguzz98/${project.artifactId}:s6</name>
-					</image>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<to>
+						<image>jaguzz98/${project.artifactId}:s6</image>
+					</to>
 				</configuration>
 			</plugin>
 		</plugins>
